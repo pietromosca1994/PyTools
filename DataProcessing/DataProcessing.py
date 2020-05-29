@@ -12,6 +12,7 @@ class ExtPdDataFrame(object):
         '''
         Initialisation method
         '''
+        
         if 'path' in kwargs:
             self.path=kwargs['path']
             self.load_data(kwargs['path'])
@@ -36,7 +37,8 @@ class ExtPdDataFrame(object):
     
     def load_data(self, path):
         '''
-
+        Load data from a file 
+        
         Returns
         -------
         None
@@ -48,10 +50,11 @@ class ExtPdDataFrame(object):
         
         # load data based on format
         if file_extension=='.csv':
-            self.dataframe=pd.read_csv(self.path)
-            
+            self.dataframe=pd.read_csv(self.path)            
             print('[INFO] Loaded', self.path)
-            #if file_extension==   
+        #elif file_extension== 
+        else:
+            raise NameError('Not a valid file path') 
             
         return None
     
@@ -93,6 +96,8 @@ class ExtPdDataFrame(object):
       
     def X_Y_split(self, X_labels, Y_labels):
         ''' 
+        Method to split dataset in X and Y datasets
+        
         Parameters
         ----------
         X_labels : list
