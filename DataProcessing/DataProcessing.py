@@ -9,6 +9,9 @@ from sklearn import preprocessing
 class ExtPdDataFrame(object):
     
     def __init__(self, *args, **kwargs):  
+        '''
+        Initialisation method
+        '''
         if 'path' in kwargs:
             self.path=kwargs['path']
             self.load_data(kwargs['path'])
@@ -133,9 +136,7 @@ class ExtPdDataFrame(object):
         
         x=x[interval[0]: interval[1]]
         y=y[interval[0]: interval[1]]
-        
-
-        
+                
         plt.scatter(x,y)
         plt.xlabel(x_label)
         plt.ylabel(y_label)  
@@ -174,10 +175,12 @@ class ExtPdDataFrame(object):
         
         return self.scaler
         
-    def inverse_transform(self):
+    def inverse_transform(self, *args, **kwargs):
         '''
         Method to inverse the transformation applied to the data
         '''
+        if 'scaler' in kwargs:
+            self.scaler=kwargs['scaler']
         
         self.dataframe=pd.DataFrame(self.scaler.inverse_transform(self.dataframe), columns=self.dataframe.columns)
         print('[INFO] Executed Inverse Transform on the dataset')
