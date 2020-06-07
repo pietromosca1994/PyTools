@@ -5,10 +5,11 @@ import missingno as msno
 import seaborn as sn
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from skimage.util import view_as_windows
 from sklearn import preprocessing
 
 class ExtPdDataFrame(pd.DataFrame):
-    def __init__(self, *args, **kwargs):    
+    def __init__(self, *args, **kwargs):
         super(ExtPdDataFrame, self).__init__(*args, **kwargs)
         self.scaler=None
 
@@ -16,7 +17,7 @@ class ExtPdDataFrame(pd.DataFrame):
     def _constructor(self):
         return type(self)
     
-    def load_data(self, path):
+    def load(self, path):
         '''
         Function to load data into a DataFrame from a file
         '''
@@ -33,7 +34,7 @@ class ExtPdDataFrame(pd.DataFrame):
         
         return dataframe
     
-    def X_Y_split(self, X_labels, Y_labels):
+    def X_Y_split(self, X_columns, Y_columns):
         ''' 
         Method to split dataset in X and Y datasets
         
@@ -51,8 +52,8 @@ class ExtPdDataFrame(pd.DataFrame):
 
         '''
         
-        X_dataframe=self.get(X_labels)
-        Y_dataframe=self.get(Y_labels)
+        X_dataframe=self.get(X_columns)
+        Y_dataframe=self.get(Y_columns)
         
         return X_dataframe, Y_dataframe
     
@@ -151,3 +152,8 @@ class ExtPdDataFrame(pd.DataFrame):
         plt.show
         
         return CorrMatrix
+    
+    def view_as_windows(self, *args, **kwargs):
+        self.__init__(view_as_windows(np.array(self.values), *args, **kwargs), columns=self.columns)
+        
+        return None
