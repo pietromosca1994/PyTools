@@ -152,8 +152,3 @@ class ExtPdDataFrame(pd.DataFrame):
         plt.show
         
         return CorrMatrix
-    
-    def view_as_windows(self, *args, **kwargs):
-        self.__init__(view_as_windows(np.array(self.values), *args, **kwargs), columns=self.columns)
-        
-        return None
