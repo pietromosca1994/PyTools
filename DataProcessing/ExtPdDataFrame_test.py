@@ -21,7 +21,7 @@ Y_features=['feature3']
 X_data, Y_data=data.X_Y_split(X_features, Y_features)
 
 # view as windows for RNN training
-window_length=2
+window_length=2 
 X_data.ViewAsWindows(window_length)
 dims=X_data.shape
 RNN_X_data=np.reshape(X_data.values, (int(dims[0]/window_length), window_length, dims[1]))
