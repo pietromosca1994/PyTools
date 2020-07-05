@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from skimage.util import view_as_windows
 from sklearn import preprocessing
+from sklearn.feature_extraction import text
+import json
+from bs4 import BeautifulSoup
 
 class ExtPdDataFrame(pd.DataFrame):
     def __init__(self, *args, **kwargs):
@@ -18,6 +21,10 @@ class ExtPdDataFrame(pd.DataFrame):
     
     def load(self, path, *args, **kwargs):
         '''
+        path
+        *args (pd.read_csv, pd.read_excel)
+        **kwargs (pd.read_csv, pd.read_excel)
+
         Function to load data into a DataFrame from a file
         '''
         # get file name and file extension from path
@@ -26,29 +33,25 @@ class ExtPdDataFrame(pd.DataFrame):
         # load data based on format
         if file_extension=='.csv':
             self.__init__(pd.read_csv(path, *args, **kwargs))            
-            print('[INFO] Loaded', path)
-        #elif file_extension== 
+            
+        elif file_extension=='.xlsx':
+            self.__init__(pd.read_excel(path, *args, **kwargs)) 
+        
+        elif file_extension=='.json':
+            dbfile = open(path, 'rb')
+            self.__init__(json.load(dbfile, *args, **kwargs)) 
+            dbfile.close()
+        
         else:
             raise NameError('Not a valid file path')
         
+        print('[INFO] Loaded', path)
         return None
     
     def X_Y_split(self, X_features, Y_features):
-        ''' 
-        Method to split dataset in X and Y datasets
-        
-        Parameters
-        ----------
-        X_labels : list
-            X dataset labels
-        Y_labels : list
-            X dataset labels
-
-        Returns
-        -------
-        X_dataframe
-        Y_dataframe
-
+        '''
+        X_features
+        Y_features
         '''
         
         X_dataframe=self.get(X_features)
@@ -58,35 +61,40 @@ class ExtPdDataFrame(pd.DataFrame):
     
     def train_test_split(self, *args, **kwargs):
         '''
-        Wrpper for sklearn.model_selection.train_test_split
+        *args (sklearn.model_selection.train_test_split)
+        **kwargs (fro sklearn.model_selection.train_test_split)
+
+        train_size: If float, should be between 0.0 and 1.0 and represent the proportion of the dataset
+        to include in the train split. If int, represents the absolute number of train samples. If None,
+        the value is automatically set to the complement of the test size.
         
+        test_size: If float, should be between 0.0 and 1.0 and represent the proportion of the dataset 
+        to include in the test split. If int, represents the absolute number of test samples. If None, 
+        the value is set to the complement of the train size. If train_size is also None, it will be 
+        set to 0.25.
+        
+        Function to split the dataset in train and test datasets
         '''
         
         training_dataframe, test_dataframe=train_test_split(self, *args, **kwargs)
         
         return training_dataframe, test_dataframe 
     
-    def transform(self, transformation, scaler=None, *args, **kwargs):
+    def Transform(self, transformation=None, scaler=None, *args, **kwargs):
         '''
-        Wrapper for sklearn.preprocessing
-        
-        Parameters
-        ----------
-        transformation : 'string'
-            preprocessing transformation from sklearn.preprocessing
-        
-        Returns
-        -------
-        self.scaler : scaler(object)
-            scaler
+        transformation: transformation to apply to the dataset
+        scaler: 
+        *args
+        **kwargs
+
         '''
-    
+            
         if scaler==None:
             if transformation=='StandardScaler': 
-                scaler=preprocessing.StandardScaler()
+                scaler=preprocessing.StandardScaler(*args, **kwargs)
             
             elif transformation=='Normalizer':
-                scaler=preprocessing.Normalizer()
+                scaler=preprocessing.Normalizer(*args, **kwargs)
             
             elif transformation=='MinMaxScaler':
                 scaler=preprocessing.MinMaxScaler(*args, **kwargs)  
@@ -94,16 +102,16 @@ class ExtPdDataFrame(pd.DataFrame):
             elif transformation=='RobustScaler':
                 scaler=preprocessing.RobustScaler(*args, **kwargs)
             
-            self.scaler=scaler.fit(self.values)
-        else:
-            self.scaler=scaler
-
-        self.__init__(scaler.transform(self.values), columns=self.columns)
+            elif transformation=='TfidfVectorizer':
+                scaler=text.TfidfVectorizer(*args, **kwargs)      
+        
+        scaler.fit(self.values)
+        self.__init__(data=scaler.transform(self.values), columns=self.columns)
         self.scaler=scaler
         
         return None
         
-    def inverse_transform(self, *args, **kwargs):
+    def InverseTransform(self, *args, **kwargs):
         '''
         Method to inverse the transformation applied to the data
         
@@ -136,6 +144,7 @@ class ExtPdDataFrame(pd.DataFrame):
         data_as_windows=np.squeeze(view_as_windows(self.values, (window_length, self.values.shape[1])))
         shape=data_as_windows.shape
         data_as_windows=np.reshape(data_as_windows, (shape[0]*shape[1], shape[2]))
+        
         self.__init__(data_as_windows, columns=self.columns)
         
         return None
@@ -173,3 +182,4 @@ class ExtPdDataFrame(pd.DataFrame):
         plt.show
         
         return CorrMatrix
+        
