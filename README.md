@@ -4,7 +4,9 @@ A collection of Python Tools that can facilitate Python usage
 
 ## List of Packages 
 ### DataProcessing
-  + *ExtDataFrame*: Extension of pandas.DataFrame in order to preprocess data for Deep Learning training
+  + *ExtPdDataFrame*: Extension of pandas.DataFrame for Deep Learning data preprocessing
+### DataExport
+  + *DataExport*: collection of function to import/export data from Python
 
 ## Dependencies
   + pandas
