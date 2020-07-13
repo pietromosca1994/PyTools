@@ -6,7 +6,7 @@ from keras.models import load_model
 #######################################################################################
 # save model
 #######################################################################################
-def SaveKerasModel(model, history, path):
+def SaveKerasModel(model, path):
  
     if not(os.path.isdir(path)):
         os.mkdir(path)
@@ -24,9 +24,6 @@ def SaveKerasModel(model, history, path):
     # Save model weights
     model.save_weights(path+'model_weights.h5')
     print('[INFO] Saved NN model weights to '+path)
-
-    # save training history
-    SaveData(history, path+'history.pckl')
     
     return None
     
