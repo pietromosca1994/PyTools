@@ -8,8 +8,6 @@ from sklearn.model_selection import train_test_split
 from skimage.util import view_as_windows
 from sklearn import preprocessing
 from sklearn.feature_extraction import text
-import json
-from bs4 import BeautifulSoup
 
 class ExtPdDataFrame(pd.DataFrame):
     def __init__(self, *args, **kwargs):
@@ -103,9 +101,10 @@ class ExtPdDataFrame(pd.DataFrame):
                 scaler=preprocessing.RobustScaler(*args, **kwargs)
             
             elif transformation=='TfidfVectorizer':
-                scaler=text.TfidfVectorizer(*args, **kwargs)      
+                scaler=text.TfidfVectorizer(*args, **kwargs)    
         
         scaler.fit(self.values)
+        
         self.__init__(data=scaler.transform(self.values), columns=self.columns)
         self.scaler=scaler
         
@@ -141,13 +140,13 @@ class ExtPdDataFrame(pd.DataFrame):
         -------
         None      
         '''   
-        data_as_windows=np.squeeze(view_as_windows(self.values, (window_length, self.values.shape[1])))
-        shape=data_as_windows.shape
-        data_as_windows=np.reshape(data_as_windows, (shape[0]*shape[1], shape[2]))
+        data_as_windows_3D=np.squeeze(view_as_windows(self.values, (window_length, self.values.shape[1])))
+        shape=data_as_windows_3D.shape
+        data_as_windows=np.reshape(data_as_windows_3D, (shape[0]*shape[1], shape[2]))
         
         self.__init__(data_as_windows, columns=self.columns)
         
-        return None
+        return data_as_windows_3D
         
     def miss_plt(self, *args, **kwargs):
         '''

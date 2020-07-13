@@ -22,15 +22,15 @@ X_features=['feature1', 'feature2', 'feature3']
 Y_features=['feature4']
 X_data, Y_data=df.X_Y_split(X_features, Y_features)
 
+'''
 #apply transformation
 df_trans=df
 df_trans.Transform(transformation='StandardScaler')
 print('Transformed Dataframe')
 print(df_trans)
-
-
+'''
 # view as windows for RNN training
-window_length=2 
+window_length=3
 X_data.ViewAsWindows(window_length)
 dims=X_data.shape
 RNN_X_data=np.reshape(X_data.values, (int(dims[0]/window_length), window_length, dims[1]))

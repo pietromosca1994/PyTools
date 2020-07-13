@@ -8,7 +8,7 @@ def SaveData(obj, path, *args , **kwargs):
     '''
  
     dbfile=open(path, 'wb')
-    pickle.dump(obj=obj, file=dbfile, *args, **kwargs)
+    pickle.dump(obj=obj, file=dbfile,  protocol=4, *args, **kwargs)
     dbfile.close()
     
     print('[INFO] Exported data to ', path)
