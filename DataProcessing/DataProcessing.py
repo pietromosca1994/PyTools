@@ -102,9 +102,10 @@ class ExtPdDataFrame(pd.DataFrame):
             
             elif transformation=='TfidfVectorizer':
                 scaler=text.TfidfVectorizer(*args, **kwargs)    
+
+            scaler.fit(self.values)
         
-        scaler.fit(self.values)
-        
+        self.scaler=scaler        
         self.__init__(data=scaler.transform(self.values), columns=self.columns)
         self.scaler=scaler
         
