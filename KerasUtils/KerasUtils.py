@@ -1,7 +1,8 @@
 import os
 from DataExport import SaveData
 from DataExport import LoadData
-from keras.models import load_model
+from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_weights
 
 #######################################################################################
 # save model
@@ -33,22 +34,18 @@ def SaveKerasModel(model, path):
 def LoadKerasModel(path):
     
     # load NN model
-    model=load_model(path+'model.h5')
+    model=load_model(path)
     model.summary()
     print('[INFO] Loaded NN model from '+path)
-    
-    # load training history
-    history=LoadData(path+'history.pckl')
-    print('[INFO] Loaded NN model history from '+path)
-    
-    return model, history
+
+    return model
 
 #######################################################################################
 # load weights
 #######################################################################################
 def LoadKerasWeights(model, path):
    
-    model.load_weights(path+'model_weights.h5')
+    model.load_weights(path)
     
     print('[INFO] Loaded NN model weights from '+path+' ...')
     
