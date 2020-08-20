@@ -17,7 +17,7 @@ class ExtPdDataFrame(pd.DataFrame):
     def _constructor(self):
         return type(self)
     
-    def load(self, path, *args, **kwargs):
+    def Load(self, path, *args, **kwargs):
         '''
         path
         *args (pd.read_csv, pd.read_excel)
@@ -57,7 +57,7 @@ class ExtPdDataFrame(pd.DataFrame):
         
         return X_dataframe, Y_dataframe
     
-    def train_test_split(self, *args, **kwargs):
+    def TrainTestSplit(self, *args, **kwargs):
         '''
         *args (sklearn.model_selection.train_test_split)
         **kwargs (fro sklearn.model_selection.train_test_split)
